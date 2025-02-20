@@ -1,6 +1,7 @@
 package daemon.go.kr.api.collection;
 
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -10,10 +11,16 @@ import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Set;
 
 import javax.net.ssl.HttpsURLConnection;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -27,15 +34,15 @@ public class ApiCollectionDaemon {
 		String method = null;
 		
 		JSONParser parser = new JSONParser(); // JSON 파일 읽기
-		Reader reader = new FileReader("C:\\Users\\INIT_PC\\Desktop\\20250214_KOSIS데이터.json"); // 특정한 위치에 있는 JSON 파일을 읽는다
+		Reader reader = new FileReader("C:\\Users\\INIT-PC\\Downloads\\20250219_KOSIS데이터 (2).json"); // 특정한 위치에 있는 JSON 파일을 읽는다
 		JSONObject jsonObject = (JSONObject) parser.parse(reader);
 		
 		JSONArray jArray = (JSONArray) jsonObject.get("input"); // 파라미터(입력항목)
 		JSONObject sourceObj = (JSONObject) jsonObject.get("source"); // 소스정보
-		
+		System.out.println("sourceObj 체크용 "+sourceObj);
 		if(StringUtils.isNotEmpty((String)sourceObj.get("SRC_VAL"))) {
 			url = (String) sourceObj.get("SRC_VAL"); // URL정보를 가져온다
-			
+
 			if(StringUtils.isNotEmpty((String)sourceObj.get("METHOD"))) {
 				if(sourceObj.get("METHOD").equals("GET")) {
 					url += "?";
@@ -63,17 +70,47 @@ public class ApiCollectionDaemon {
 		//URL 연결에서 데이터를 읽을지에 대한 설정 ( defualt true )
 		//API에서 받은 데이터를 StringBuilder 형태로 리턴하여 줍니다. 
         result = hUtils.getHttpRespons(conn);
-        result = result.replace("{", "{\"").replace(",", ",\"").replace(":", "\":");
-        result = result.replace(",\"{", ",{");
-        
+        result = result.replaceAll("(?<=[{,\\s])([A-Za-z0-9_]+)(?=\\s*:)", "\"$1\"");
+
         JSONParser objParser = new JSONParser(); 
         JSONArray resultArray = (JSONArray) objParser.parse(result);
         
-        // .JSON 형식의 파일을 생성한다
-        FileWriter fileWriter = new FileWriter("C:\\Users\\INIT_PC\\Desktop\\outuut_test.json");
+        // .xlsx (엑셀) 형식의 파일을 생성한다
+        try (Workbook workbook = new XSSFWorkbook();
+        	FileOutputStream fileOut = new FileOutputStream("C:\\Users\\INIT-PC\\Downloads\\output_test.xlsx")) {
+
+        	Sheet sheet = workbook.createSheet("데이터");
+
+        	// 헤더 생성 (첫 번째 JSON 객체의 키를 사용)
+        	JSONObject firstObj = (JSONObject) resultArray.get(0);
+        	Set<String> keys = firstObj.keySet();
+        	Row headerRow = sheet.createRow(0);
+        	int colNum = 0;
+        	for (String key : keys) {
+        		headerRow.createCell(colNum++).setCellValue(key);
+        	}
+
+        	// 데이터 작성
+        	for (int i = 0; i < resultArray.size(); i++) {
+        		Row row = sheet.createRow(i + 1);
+        		JSONObject obj = (JSONObject) resultArray.get(i);
+        		int j = 0;
+        		for (String key : keys) {
+        			row.createCell(j++).setCellValue(obj.get(key).toString());
+        		}
+        	}
+
+        	// 엑셀 파일 저장
+        	workbook.write(fileOut);
+        } catch (IOException e) {
+        	e.printStackTrace();
+        }
+        
+//         .JSON 형식의 파일을 생성한다
+        FileWriter fileWriter = new FileWriter("C:\\Users\\INIT-PC\\Downloads\\output_test.json");
         fileWriter.write(resultArray.toJSONString());
         fileWriter.flush();
-
+        fileWriter.close();
 	}
 
 }
@@ -160,7 +197,7 @@ class HttpUtils {
 		StringBuilder sb = new StringBuilder();
 		String line = "";
 		
-		try (InputStreamReader ir = new InputStreamReader(in);
+		try (InputStreamReader ir = new InputStreamReader(in, StandardCharsets.UTF_8);
 				BufferedReader br = new BufferedReader(ir)){
 			while( (line = br.readLine()) != null) {
 				sb.append(line);
