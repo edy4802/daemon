@@ -8,6 +8,7 @@ import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
@@ -18,20 +19,29 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
+import daemon.go.kr.api.config.daemonProperties;
+
 public class ApiCollectionDaemon implements Job {
 	
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		HttpUtils hUtils = new HttpUtils();
 		ExcelUtils excelUtils = new ExcelUtils();
+		daemonProperties daemonProperties = new daemonProperties();
+		Map<String, Object> propsMap = daemonProperties.getProperties();
+		System.out.println("propsMap : " + propsMap);
 		
 		String url = null;
 		String method = null;
 		
 		JSONParser parser = new JSONParser(); // JSON 파일 읽기
 		Reader reader = null;
-		String inFilePath = "C:\\Users\\INIT_PC\\Desktop\\";
+		String inFilePath = "";
 		String inFileName = "";
+		
+		if(StringUtils.isNotEmpty((String)propsMap.get("filePath"))) {
+			inFilePath = (String) propsMap.get("filePath");
+		}
 		
 		LocalDateTime currentTime = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
