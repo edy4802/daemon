@@ -4,6 +4,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.poi.ss.usermodel.Row;
@@ -13,10 +14,15 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import daemon.go.kr.api.config.daemonProperties;
+
 public class ExcelUtils {
+	
+	daemonProperties daemonProperties = new daemonProperties();
+	Map<String, Object> propsMap = daemonProperties.getProperties();
 
 	public void makeExcel(JSONArray resultArray, String originalFileName) {
-		String outfilePath = "C:\\test\\";
+		String outfilePath = (String)propsMap.get("outFilePath");
 		
 		LocalDateTime currentTime2 = LocalDateTime.now();
         DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");

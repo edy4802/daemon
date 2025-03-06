@@ -15,10 +15,13 @@ public class daemonProperties {
 		try {
 			InputStream reader = getClass().getResourceAsStream("/props/daemon.properties");
 	        props.load(reader);
-	        propsMap.put("filePath", props.getProperty("filePath"));
+	        propsMap.put("inFilePath", props.getProperty("inFilePath"));
+	        propsMap.put("outFilePath", props.getProperty("outFilePath"));
 	        propsMap.put("OPM", props.getProperty("OPM"));
 	        propsMap.put("OPY", props.getProperty("OPY"));
 	        propsMap.put("OPTM", props.getProperty("OPTM"));
+	        propsMap.put("OPOM", props.getProperty("OPOM"));
+	        propsMap.put("fileName", props.getProperty("fileName"));
 	    } catch (IOException e) {
 	        e.printStackTrace();
 	    }

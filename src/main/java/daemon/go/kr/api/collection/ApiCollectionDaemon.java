@@ -50,7 +50,7 @@ public class ApiCollectionDaemon implements Job {
 		ExcelUtils excelUtils = new ExcelUtils();
 		
 		// 파일 경로 ( 조회옹 )
-		String inFilePath = (String) propsMap.get("filePath");
+		String inFilePath = (String) propsMap.get("inFilePath");
 		if (StringUtils.isEmpty(inFilePath)) {
 		    System.out.println("파일 경로가 설정되지 않았습니다.");
 		    return;
@@ -174,7 +174,7 @@ public class ApiCollectionDaemon implements Job {
  	private void saveJsonResult(JSONArray resultArray, String originalFileName) {
  		
  		// 파일 경로 ( 출력옹 )
- 		String outFilePath = (String) propsMap.get("filePath");
+ 		String outFilePath = (String) propsMap.get("outFilePath");
 		
 		// 파일 날짜패턴 ( 출력용 )
 		LocalDateTime currentTime = LocalDateTime.now();
