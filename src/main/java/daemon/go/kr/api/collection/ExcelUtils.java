@@ -15,14 +15,20 @@ import org.json.simple.JSONObject;
 
 public class ExcelUtils {
 
-	public void makeExcel(JSONArray resultArray) {
-		String outfilePath = "C:\\Users\\INIT_PC\\Desktop\\";
-        String outfileName = "";
+	public void makeExcel(JSONArray resultArray, String originalFileName) {
+		String outfilePath = "C:\\test\\";
 		
 		LocalDateTime currentTime2 = LocalDateTime.now();
         DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         String formattedDateTime2 = currentTime2.format(formatter2);
-        outfileName = formattedDateTime2 + ".xlsx";
+        
+        // 원본 파일명에서 확장자 제거
+        String baseFileName = originalFileName.replaceAll("\\.json$", "");
+        
+        // 엑셀 파일명 지정
+        String outfileName = formattedDateTime2 + "_" + baseFileName + ".xlsx";
+        
+        //outfileName = formattedDateTime2 + ".xlsx";
 		
 		// .xlsx (엑셀) 형식의 파일을 생성한다
 	    try (Workbook workbook = new XSSFWorkbook();

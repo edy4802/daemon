@@ -157,7 +157,7 @@ public class ApiCollectionDaemon implements Job {
 		}
 		
 		// 엑셀 파일로 만들기
-		excelUtils.makeExcel(resultArray);
+		excelUtils.makeExcel(resultArray, file.getName());
 		
 		// 결과 JSON 파일 저장
         saveJsonResult(resultArray, file.getName());
@@ -180,9 +180,13 @@ public class ApiCollectionDaemon implements Job {
 		LocalDateTime currentTime = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss"); // 일단 초까지 파일명으로 뽑아서 중복 안 되도록 임시로 작업
         String formattedDateTime = currentTime.format(formatter);
-		
-        String outFileName = formattedDateTime + ".json"; // [ 출력 파일명 형식 지정 ] **********
- 		
+
+        // 원본 파일명에서 확장자 제거
+        String baseFileName = originalFileName.replaceAll("\\.json$", "");
+        
+        // 출력 파일명: "yyyyMMdd_원본파일명.json"
+        String outFileName = formattedDateTime + "_" + baseFileName + ".json";
+        
         FileWriter fileWriter;
         
         try {
