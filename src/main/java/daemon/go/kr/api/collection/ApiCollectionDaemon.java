@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -193,10 +194,35 @@ public class ApiCollectionDaemon implements Job {
 			fileWriter = new FileWriter(outFilePath + outFileName);
 			fileWriter.write(resultArray.toJSONString());
 	        fileWriter.flush();
+	        fileMove(originalFileName);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
 	}
+ 	
+ 	
+ 	
+ 	private void fileMove(String originalFileName) {
+ 		// 이동시킬 파일 경로 - 수집을 끝낸 설정 JSON파일을 이동시킨다(백업 개념)
+ 		String moveFilePath = (String)propsMap.get("moveFilePath");
+ 		String inFilePath = (String)propsMap.get("inFilePath");
+ 		
+ 		// 원본 파일
+ 		File orgFile = new File(inFilePath + originalFileName);
+ 		
+ 		// 백업 파일
+ 		File bakFile = new File(moveFilePath + "bak_" + originalFileName);
+ 		
+ 		try {
+ 			// 파일 
+			FileUtils.moveFile(orgFile, bakFile);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+ 		
+ 		
+ 	}
          	
 }       
