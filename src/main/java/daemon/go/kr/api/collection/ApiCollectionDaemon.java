@@ -67,7 +67,7 @@ public class ApiCollectionDaemon implements Job {
             jsonFiles = Files.list(Paths.get(inFilePath))
                     .filter(Files::isRegularFile)
                     .map(Path::toFile)
-                    .filter(file -> file.getName().matches(formattedDate + "_KOSIS데이터.*\\.json"))
+                    .filter(file -> file.getName().matches("^.*\\.json$"))
                     .collect(Collectors.toList());
         } catch (IOException e) {
             e.printStackTrace();
