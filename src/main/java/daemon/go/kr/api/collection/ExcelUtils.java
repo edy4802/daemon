@@ -21,8 +21,7 @@ public class ExcelUtils {
 	daemonProperties daemonProperties = new daemonProperties();
 	Map<String, Object> propsMap = daemonProperties.getProperties();
 
-	public void makeExcel(JSONArray resultArray, String originalFileName) {
-		String outfilePath = (String)propsMap.get("outFilePath");
+	public void makeExcel(JSONArray resultArray, String originalFileName, String outFilePath) {
 		
 		LocalDateTime currentTime2 = LocalDateTime.now();
         DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
@@ -38,7 +37,7 @@ public class ExcelUtils {
 		
 		// .xlsx (엑셀) 형식의 파일을 생성한다
 	    try (Workbook workbook = new XSSFWorkbook();
-	    	FileOutputStream fileOut = new FileOutputStream(outfilePath + outfileName)) {
+	    	FileOutputStream fileOut = new FileOutputStream(outFilePath + outfileName)) {
 
 	    	Sheet sheet = workbook.createSheet("데이터");
 

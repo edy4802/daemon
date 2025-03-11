@@ -158,7 +158,8 @@ public class ApiCollectionDaemon2 implements Job {
 		}
 		
 		// 엑셀 파일로 만들기
-		excelUtils.makeExcel(resultArray, file.getName());
+		String outFilePath = (String)propsMap.get("outFilePath2");
+		excelUtils.makeExcel(resultArray, file.getName(), outFilePath);
 		
 		// 결과 JSON 파일 저장
         saveJsonResult(resultArray, file.getName());

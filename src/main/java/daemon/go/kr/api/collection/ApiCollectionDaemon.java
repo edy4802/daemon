@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -158,7 +157,8 @@ public class ApiCollectionDaemon implements Job {
 		}
 		
 		// 엑셀 파일로 만들기
-		excelUtils.makeExcel(resultArray, file.getName());
+		String outFilePath = (String)propsMap.get("outFilePath");
+		excelUtils.makeExcel(resultArray, file.getName(), outFilePath);
 		
 		// 결과 JSON 파일 저장
         saveJsonResult(resultArray, file.getName());
