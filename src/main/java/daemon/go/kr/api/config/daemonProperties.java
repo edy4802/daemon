@@ -17,7 +17,6 @@ public class daemonProperties {
 	        props.load(reader);
 	        propsMap.put("inFilePath", props.getProperty("inFilePath"));
 	        propsMap.put("outFilePath", props.getProperty("outFilePath"));
-	        propsMap.put("moveFilePath", props.getProperty("moveFilePath"));
 	        propsMap.put("OPM", props.getProperty("OPM"));
 	        propsMap.put("OPY", props.getProperty("OPY"));
 	        propsMap.put("OPTM", props.getProperty("OPTM"));
