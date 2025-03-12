@@ -27,11 +27,11 @@ import org.quartz.JobExecutionException;
 
 import daemon.go.kr.api.config.daemonProperties;
 
-public class ApiCollectionDaemon2 implements Job {
+public class ApiCollectionDaemon3 implements Job {
 
 /*
 	-------------------------------------------------------------------
-  	※ 1년마다 자료 수집 - 3월, 6월, 9월, 12월 각 1일마다
+  	※ 분기별(3개월마다) 자료 수집 - 3월, 6월, 9월, 12월 각 1일마다
   	최초 작성일 : 2025.02.17
   	최종 수정일 : 
   	최초 작성자 : 엄대영 책임
@@ -51,7 +51,7 @@ public class ApiCollectionDaemon2 implements Job {
 		ExcelUtils excelUtils = new ExcelUtils();
 		
 		// 파일 경로 ( 조회옹 )
-		String inFilePath = (String) propsMap.get("inFilePath3");
+		String inFilePath = (String) propsMap.get("inFilePath2");
 		if (StringUtils.isEmpty(inFilePath)) {
 		    System.out.println("파일 경로가 설정되지 않았습니다.");
 		    return;
@@ -158,7 +158,7 @@ public class ApiCollectionDaemon2 implements Job {
 		}
 		
 		// 엑셀 파일로 만들기
-		String outFilePath = (String)propsMap.get("outFilePath3");
+		String outFilePath = (String)propsMap.get("outFilePath2");
 		excelUtils.makeExcel(resultArray, file.getName(), outFilePath);
 		
 		// 결과 JSON 파일 저장
@@ -176,7 +176,7 @@ public class ApiCollectionDaemon2 implements Job {
  	private void saveJsonResult(JSONArray resultArray, String originalFileName) {
  		
  		// 파일 경로 ( 출력옹 )
- 		String outFilePath = (String) propsMap.get("outFilePath3");
+ 		String outFilePath = (String) propsMap.get("outFilePath2");
 		
 		// 파일 날짜패턴 ( 출력용 )
 		LocalDateTime currentTime = LocalDateTime.now();

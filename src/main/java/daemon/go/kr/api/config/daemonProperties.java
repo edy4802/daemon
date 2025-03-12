@@ -19,12 +19,15 @@ public class daemonProperties {
 	        propsMap.put("outFilePath", props.getProperty("outFilePath"));
 	        propsMap.put("inFilePath2", props.getProperty("inFilePath2"));
 	        propsMap.put("outFilePath2", props.getProperty("outFilePath2"));
+	        propsMap.put("inFilePath3", props.getProperty("inFilePath3"));
+	        propsMap.put("outFilePath3", props.getProperty("outFilePath3"));
 	        propsMap.put("OPM", props.getProperty("OPM"));
 	        propsMap.put("OPY", props.getProperty("OPY"));
 	        propsMap.put("OPTM", props.getProperty("OPTM"));
 	        propsMap.put("OPOM", props.getProperty("OPOM"));
 	        propsMap.put("OPM1", props.getProperty("OPM1"));
 	        propsMap.put("OPM2", props.getProperty("OPM2"));
+	        propsMap.put("OPM3", props.getProperty("OPM3"));
 	    } catch (IOException e) {
 	        e.printStackTrace();
 	    }
