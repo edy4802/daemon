@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -26,7 +27,7 @@ import org.quartz.JobExecutionException;
 
 import daemon.go.kr.api.config.daemonProperties;
 
-public class ApiCollectionDaemon implements Job {
+public class ApiCollectionDaemon5 implements Job {
 
 /*
 	-------------------------------------------------------------------
@@ -49,7 +50,7 @@ public class ApiCollectionDaemon implements Job {
 		ExcelUtils excelUtils = new ExcelUtils();
 		
 		// 파일 경로 ( 조회옹 )
-		String inFilePath = (String) propsMap.get("inFilePath01");
+		String inFilePath = (String) propsMap.get("inFilePath05");
 		if (StringUtils.isEmpty(inFilePath)) {
 		    System.out.println("파일 경로가 설정되지 않았습니다.");
 		    return;
@@ -156,7 +157,7 @@ public class ApiCollectionDaemon implements Job {
 		}
 		
 		// 엑셀 파일로 만들기
-		String outFilePath = (String)propsMap.get("outFilePath01");
+		String outFilePath = (String)propsMap.get("outFilePath05");
 		excelUtils.makeExcel(resultArray, file.getName(), outFilePath);
 		
 		// 결과 JSON 파일 저장
@@ -174,7 +175,7 @@ public class ApiCollectionDaemon implements Job {
  	private void saveJsonResult(JSONArray resultArray, String originalFileName) {
  		
  		// 파일 경로 ( 출력옹 )
- 		String outFilePath = (String) propsMap.get("outFilePath01");
+ 		String outFilePath = (String) propsMap.get("outFilePath05");
 		
 		// 파일 날짜패턴 ( 출력용 )
 		LocalDateTime currentTime = LocalDateTime.now();
