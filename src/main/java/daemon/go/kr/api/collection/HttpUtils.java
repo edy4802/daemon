@@ -11,6 +11,7 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 public class HttpUtils {
+	DaemonLogger logger = DaemonLogger.getLogger();
 
 	public HttpURLConnection getHttpURLConnection(String strUrl, String method) {
 		URL url;
@@ -61,18 +62,16 @@ public class HttpUtils {
 		try {
 			if(conn.getResponseCode() == 200) {
             // 정상적으로 데이터를 받았을 경우
-            	//데이터 가져오기
-				System.out.println(conn.getResponseCode());
 				sb = readResopnseData(conn.getInputStream());
 			}else{
             // 정상적으로 데이터를 받지 못했을 경우
             
             	//오류코드, 오류 메시지 표출
-				System.out.println(conn.getResponseCode());
-				System.out.println(conn.getResponseMessage());
+				logger.warning(String.valueOf(conn.getResponseCode()));
+				logger.warning(String.valueOf(conn.getResponseMessage()));
 				//오류정보 가져오기
 				sb = readResopnseData(conn.getErrorStream());
-				System.out.println("error : " + sb.toString());
+				logger.warning("error : " + sb.toString());
 				return null;
 			}
 		} catch (IOException e) {

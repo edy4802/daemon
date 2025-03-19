@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -44,6 +43,8 @@ public class ApiCollectionDaemon5 implements Job {
 	daemonProperties daemonProperties = new daemonProperties();
 	Map<String, Object> propsMap = daemonProperties.getProperties();
 	
+	DaemonLogger logger = DaemonLogger.getLogger();
+	
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		HttpUtils hUtils = new HttpUtils();
@@ -52,7 +53,7 @@ public class ApiCollectionDaemon5 implements Job {
 		// 파일 경로 ( 조회옹 )
 		String inFilePath = (String) propsMap.get("inFilePath05");
 		if (StringUtils.isEmpty(inFilePath)) {
-		    System.out.println("파일 경로가 설정되지 않았습니다.");
+			logger.log("파일 경로가 설정되지 않았습니다.");
 		    return;
 		}
 		
@@ -75,12 +76,12 @@ public class ApiCollectionDaemon5 implements Job {
         }
 
         if (jsonFiles.isEmpty()) {
-            System.out.println("처리할 JSON 파일이 없습니다.");
+        	logger.log("처리할 JSON 파일이 없습니다.");
             return;
         }
 
         for (File file : jsonFiles) {
-            System.out.println("처리 중: " + file.getName());
+        	logger.log("처리 중: " + file.getName());
             processJsonFile(file, hUtils, excelUtils);
         }
 	}	
