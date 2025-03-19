@@ -52,7 +52,7 @@ public class ApiCollectionDaemon5 implements Job {
 		// 파일 경로 ( 조회옹 )
 		String inFilePath = (String) propsMap.get("inFilePath05");
 		if (StringUtils.isEmpty(inFilePath)) {
-		    System.out.println("파일 경로가 설정되지 않았습니다.");
+		    System.out.println("inFolder05 폴더 경로가 설정되지 않았습니다.");
 		    return;
 		}
 		
@@ -75,12 +75,12 @@ public class ApiCollectionDaemon5 implements Job {
         }
 
         if (jsonFiles.isEmpty()) {
-            System.out.println("처리할 JSON 파일이 없습니다.");
+            System.out.println("inFolder05 폴더 내 처리 할 API설정 JSON 파일이 없습니다.");
             return;
         }
 
         for (File file : jsonFiles) {
-            System.out.println("처리 중: " + file.getName());
+            System.out.println("inFolder05 " + file.getName() + "파일 작업 중");
             processJsonFile(file, hUtils, excelUtils);
         }
 	}	
