@@ -37,7 +37,7 @@ public class DaemonLogger {
         warningFile.setFormatter(new SimpleFormatter()); 	// 로그를 기록하는 형식 지정 
         fineFile.setFormatter(new SimpleFormatter()); 	// 로그를 기록하는 형식 지정 
 
-        logger.setLevel(Level.ALL);				// 전체에 대한 logger의 level 지정
+        logger.setLevel(Level.INFO);				// 전체에 대한 logger의 level 지정
         fineFile.setLevel(Level.FINE);			// fineFile 핸들러의 level 지정	
         warningFile.setLevel(Level.WARNING);		// warningFile 핸들러의 level 지정	
 	

@@ -21,6 +21,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.quartz.Job;
+import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
@@ -40,8 +41,8 @@ public class ApiCollectionDaemon implements Job {
   	-------------------------------------------------------------------
 */
 	
-	daemonProperties daemonProperties = new daemonProperties();
-	Map<String, Object> propsMap = daemonProperties.getProperties();
+//	daemonProperties daemonProperties = new daemonProperties();
+//	Map<String, Object> propsMap = daemonProperties.getProperties();
 	DaemonLogger logger = DaemonLogger.getLogger();
 	
 	@Override
@@ -49,10 +50,15 @@ public class ApiCollectionDaemon implements Job {
 		HttpUtils hUtils = new HttpUtils();
 		ExcelUtils excelUtils = new ExcelUtils();
 		
+		// main class에서 설정한 jobDetail에 넣어둔 jobDataMap을 꺼내 사용한다.
+		JobDataMap jobDatamap = context.getJobDetail().getJobDataMap();
+		String inFilePath = jobDatamap.getString("inFilePath");
+		String outFilePath = jobDatamap.getString("outFilePath");
+		
 		// 파일 경로 ( 조회옹 )
-		String inFilePath = (String) propsMap.get("inFilePath01");
+//		String inFilePath = (String) propsMap.get("inFilePath01");
 		if (StringUtils.isEmpty(inFilePath)) {
-			logger.warning("inFolder01 폴더 경로가 설정되지 않았습니다.");
+			logger.warning("inFolder 폴더 경로가 설정되지 않았습니다.");
 		    return;
 		}
 		
@@ -75,13 +81,13 @@ public class ApiCollectionDaemon implements Job {
         }
 
         if (jsonFiles.isEmpty()) {
-        	logger.warning("inFolder01 폴더 내 처리 할 API설정 JSON 파일이 없습니다.");
+        	logger.warning("inFolder 폴더 내 처리 할 API설정 JSON 파일이 없습니다.");
             return;
         }
 
         for (File file : jsonFiles) {
-        	logger.warning("inFolder01 " + file.getName() + "파일 작업 중");
-            processJsonFile(file, hUtils, excelUtils);
+        	logger.warning("inFolder " + file.getName() + "파일 작업 중");
+            processJsonFile(file, hUtils, excelUtils, outFilePath);
         }
 	}	
 	
@@ -94,7 +100,7 @@ public class ApiCollectionDaemon implements Job {
   	
   	----------------------------------------------------
 */ 	
- 	private void processJsonFile(File file, HttpUtils hUtils, ExcelUtils excelUtils) {
+ 	private void processJsonFile(File file, HttpUtils hUtils, ExcelUtils excelUtils, String outFilePath) {
  		
  		JSONParser parser = new JSONParser(); // JSON 파일 읽기
  		JSONObject jsonObject;
@@ -157,11 +163,11 @@ public class ApiCollectionDaemon implements Job {
 		}
 		
 		// 엑셀 파일로 만들기
-		String outFilePath = (String)propsMap.get("outFilePath01");
+//		String outFilePath = (String)propsMap.get("outFilePath01");
 		excelUtils.makeExcel(resultArray, file.getName(), outFilePath);
 		
 		// 결과 JSON 파일 저장
-        saveJsonResult(resultArray, file.getName());
+        saveJsonResult(resultArray, file.getName(), outFilePath);
  	}
 
  	
@@ -172,10 +178,10 @@ public class ApiCollectionDaemon implements Job {
   	
   	-------------------------------
 */ 	
- 	private void saveJsonResult(JSONArray resultArray, String originalFileName) {
+ 	private void saveJsonResult(JSONArray resultArray, String originalFileName, String outFilePath) {
  		
  		// 파일 경로 ( 출력옹 )
- 		String outFilePath = (String) propsMap.get("outFilePath01");
+// 		String outFilePath = (String) propsMap.get("outFilePath01");
 		
 		// 파일 날짜패턴 ( 출력용 )
 		LocalDateTime currentTime = LocalDateTime.now();
