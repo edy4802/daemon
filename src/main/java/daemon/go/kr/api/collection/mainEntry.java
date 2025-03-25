@@ -155,6 +155,13 @@ public class mainEntry {
             }
             
             scheduler.start();
+            
+            
+            System.out.println("프로그램이 10초 후 강제 종료됩니다.");
+            Thread.sleep(10000);
+            System.out.println("프로그램을 강제 종료합니다.");
+            System.exit(1);
+            
         } catch(Exception e) {
             e.printStackTrace();
         }        
